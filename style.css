@@ -1,0 +1,267 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: #0a0a0a;
+    color: #e8e8e8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+#app {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.state {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 1;
+    transition: opacity 1.5s ease-in-out;
+}
+
+.state.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* STATE 0: ARRIVAL */
+#arrival {
+    background-color: #0a0a0a;
+}
+
+#character-container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 3rem;
+}
+
+#character-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 1.5s ease-in-out, visibility 1.5s ease-in-out;
+}
+
+#character-image.fade-out {
+    opacity: 0;
+    visibility: hidden;
+}
+
+#character-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+}
+
+#character-video.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+#character-video.fade-out {
+    opacity: 0;
+    visibility: hidden;
+}
+
+#character-video.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.text-container {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 0 2rem;
+}
+
+#arrival-title {
+    font-size: 1.5rem;
+    font-weight: 300;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    opacity: 1;
+    transition: opacity 1.5s ease-in-out;
+}
+
+#arrival-subtext {
+    font-size: 1rem;
+    font-weight: 300;
+    opacity: 0.7;
+    transition: opacity 1.5s ease-in-out;
+}
+
+.primary-btn {
+    background-color: transparent;
+    border: 1px solid #e8e8e8;
+    color: #e8e8e8;
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    font-weight: 300;
+    cursor: pointer;
+    transition: opacity 0.3s ease-in-out, border-color 0.3s ease-in-out;
+    font-family: inherit;
+}
+
+.primary-btn:hover {
+    opacity: 0.8;
+    border-color: #b8b8b8;
+}
+
+.primary-btn:active {
+    opacity: 0.6;
+}
+
+/* STATE 1: TRANSITION */
+#transition {
+    background-color: #050505;
+}
+
+.transition-message {
+    font-size: 1.5rem;
+    font-weight: 300;
+    text-align: center;
+    padding: 0 2rem;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+}
+
+.transition-message.visible {
+    opacity: 1;
+}
+
+/* STATE 2: LISTENING */
+#listening {
+    background-color: #0a0a0a;
+    cursor: pointer;
+}
+
+#night-audio {
+    display: none;
+}
+
+/* STATE 3: TRANSFER */
+#transfer {
+    background-color: transparent;
+    opacity: 0;
+    transition: opacity 2s ease-in-out;
+    pointer-events: none;
+    z-index: 10;
+}
+
+#transfer.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.transfer-container {
+    text-align: center;
+    padding: 0 2rem;
+}
+
+.transfer-text {
+    font-size: 1.2rem;
+    font-weight: 300;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+/* STATE 4: EXIT */
+#exit {
+    background-color: #050505;
+}
+
+#exit-character-container {
+    width: 100%;
+    max-width: 300px;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 3rem;
+    opacity: 0;
+    transition: opacity 2s ease-in-out;
+}
+
+#exit-character-container.visible {
+    opacity: 1;
+}
+
+#exit-character-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+#exit-text {
+    font-size: 1.3rem;
+    font-weight: 300;
+    line-height: 1.6;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 2s ease-in-out;
+}
+
+#exit-text.visible {
+    opacity: 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    #arrival-title {
+        font-size: 1.2rem;
+    }
+    
+    #arrival-subtext {
+        font-size: 0.9rem;
+    }
+    
+    .transition-message {
+        font-size: 1.2rem;
+    }
+    
+    .transfer-text {
+        font-size: 1rem;
+    }
+    
+    #exit-text {
+        font-size: 1.1rem;
+    }
+}
+

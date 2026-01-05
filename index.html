@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nindra Nandan</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- STATE 0: ARRIVAL -->
+        <div id="arrival" class="state">
+            <div id="character-container">
+                <img id="character-image" src="assets/nindra_nandan_center.jpeg" alt="Nindra Nandan">
+                <video id="character-video" src="assets/nindra_nandan animated.mp4" muted playsinline autoplay loop="false"></video>
+            </div>
+            <div class="text-container">
+                <h1 id="arrival-title">Someone sent you Nindra Nandan for tonight.</h1>
+                <p id="arrival-subtext">You don't have to do anything.</p>
+            </div>
+            <button id="receive-btn" class="primary-btn">Receive</button>
+        </div>
+
+        <!-- STATE 1: TRANSITION -->
+        <div id="transition" class="state hidden">
+            <div id="transition-text" class="transition-message"></div>
+        </div>
+
+        <!-- STATE 2: LISTENING -->
+        <div id="listening" class="state hidden">
+            <audio id="night-audio" src="assets/snoozie-night-1.m4a"></audio>
+        </div>
+
+        <!-- STATE 3: TRANSFER -->
+        <div id="transfer" class="state hidden">
+            <div class="transfer-container">
+                <p class="transfer-text">If someone else is awake tonight,<br>you can send Nindra Nandan to them.</p>
+                <button id="send-btn" class="primary-btn">Send for tonight</button>
+            </div>
+        </div>
+
+        <!-- STATE 4: EXIT -->
+        <div id="exit" class="state hidden">
+            <div id="exit-character-container">
+                <img id="exit-character-image" src="assets/nindra_nandan_center.jpeg" alt="Nindra Nandan">
+            </div>
+            <div class="text-container">
+                <p id="exit-text">If another night feels heavy,<br>you'll know where to find him.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="analytics.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
+
