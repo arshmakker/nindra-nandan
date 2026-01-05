@@ -203,33 +203,6 @@ body {
     color: #e8e8e8;
 }
 
-/* STATE 3: TRANSFER */
-#transfer {
-    background-color: transparent;
-    opacity: 0;
-    transition: opacity 2s ease-in-out;
-    pointer-events: none;
-    z-index: 10;
-}
-
-#transfer.visible {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.transfer-container {
-    text-align: center;
-    padding: 0 2rem;
-}
-
-.transfer-text {
-    font-size: 1.2rem;
-    font-weight: 300;
-    line-height: 1.6;
-    margin-bottom: 2rem;
-    opacity: 0.9;
-}
-
 /* STATE 4: EXIT */
 #exit {
     background-color: #050505;
@@ -282,10 +255,6 @@ body {
     
     .transition-message {
         font-size: 1.2rem;
-    }
-    
-    .transfer-text {
-        font-size: 1rem;
     }
     
     #exit-text {

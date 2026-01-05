@@ -2,12 +2,9 @@ const STATE = {
     ARRIVAL: 'arrival',
     TRANSITION: 'transition',
     LISTENING: 'listening',
-    TRANSFER: 'transfer',
     EXIT: 'exit'
 };
 
-let currentState = STATE.ARRIVAL;
-let audioStarted = false;
 let transferShown = false;
 let audioEnded = false;
 let videoHasPlayed = false;
@@ -15,7 +12,6 @@ let videoHasPlayed = false;
 const arrivalEl = document.getElementById('arrival');
 const transitionEl = document.getElementById('transition');
 const listeningEl = document.getElementById('listening');
-const transferEl = document.getElementById('transfer');
 const exitEl = document.getElementById('exit');
 
 const characterImage = document.getElementById('character-image');
@@ -23,17 +19,14 @@ const characterVideo = document.getElementById('character-video');
 const receiveBtn = document.getElementById('receive-btn');
 const transitionText = document.getElementById('transition-text');
 const nightAudio = document.getElementById('night-audio');
-const sendBtn = document.getElementById('send-btn');
 const sendAffordance = document.getElementById('send-affordance');
 const sendAffordanceBtn = document.getElementById('send-affordance-btn');
 const exitCharacterContainer = document.getElementById('exit-character-container');
 const exitText = document.getElementById('exit-text');
 
 function setState(newState) {
-    const allStates = [arrivalEl, transitionEl, listeningEl, transferEl, exitEl];
+    const allStates = [arrivalEl, transitionEl, listeningEl, exitEl];
     allStates.forEach(state => state.classList.add('hidden'));
-    
-    currentState = newState;
     
     switch(newState) {
         case STATE.ARRIVAL:
@@ -45,9 +38,6 @@ function setState(newState) {
         case STATE.LISTENING:
             listeningEl.classList.remove('hidden');
             break;
-        case STATE.TRANSFER:
-            transferEl.classList.remove('hidden');
-            break;
         case STATE.EXIT:
             exitEl.classList.remove('hidden');
             break;
@@ -55,47 +45,45 @@ function setState(newState) {
 }
 
 function checkAdSource() {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('src') === 'ad';
+    return window.location.search.includes('src=ad');
 }
 
 function handleArrival() {
-    trackArrival();
-    
     characterVideo.loop = false;
-    characterVideo.setAttribute('loop', 'false');
+    characterVideo.classList.remove('visible');
+    characterVideo.classList.add('hidden');
+    characterVideo.style.display = 'none';
     
     if (checkAdSource()) {
         characterImage.style.opacity = '0';
         characterImage.style.visibility = 'hidden';
+        characterVideo.style.display = 'block';
+        characterVideo.classList.remove('hidden');
         characterVideo.classList.add('visible');
         
-        const tryPlay = () => {
+        const playVideo = () => {
+            if (videoHasPlayed) return;
             characterVideo.play().then(() => {
                 videoHasPlayed = true;
             }).catch(() => {
-                setTimeout(tryPlay, 100);
+                setTimeout(playVideo, 100);
             });
         };
         
         characterVideo.addEventListener('loadedmetadata', () => {
-            tryPlay();
+            playVideo();
         }, { once: true });
         
         if (characterVideo.readyState >= 2) {
-            tryPlay();
+            playVideo();
         }
         
         characterVideo.addEventListener('ended', () => {
             characterVideo.pause();
-            characterVideo.removeAttribute('autoplay');
             if (characterVideo.duration > 0) {
                 characterVideo.currentTime = Math.max(0, characterVideo.duration - 0.1);
             }
         }, { once: true });
-    } else {
-        characterVideo.classList.add('hidden');
-        characterVideo.style.display = 'none';
     }
 }
 
@@ -109,9 +97,12 @@ function handleReceive() {
     setTimeout(() => {
         characterImage.style.display = 'none';
         characterVideo.style.display = 'none';
+    }, 2000);
+    
+    setTimeout(() => {
         setState(STATE.TRANSITION);
         showTransitionMessages();
-    }, 2000);
+    }, 3000);
 }
 
 function showTransitionMessages() {
@@ -154,10 +145,9 @@ function showTransitionMessages() {
 function startAudio() {
     characterImage.style.display = 'none';
     characterVideo.style.display = 'none';
+    characterVideo.classList.add('hidden');
     setState(STATE.LISTENING);
     nightAudio.play();
-    audioStarted = true;
-    trackAudioStart();
     
     setupAudioListeners();
 }
@@ -165,11 +155,15 @@ function startAudio() {
 function setupAudioListeners() {
     ensureVisualsHidden();
     
-    setTimeout(() => {
-        if (!transferShown && !audioEnded) {
-            showSendAffordance();
-        }
-    }, 22000);
+    nightAudio.addEventListener('play', () => {
+        onNightStarted();
+        
+        setTimeout(() => {
+            if (!transferShown && !audioEnded) {
+                showSendAffordance();
+            }
+        }, 22000);
+    }, { once: true });
     
     nightAudio.addEventListener('ended', () => {
         handleAudioEnd();
@@ -188,15 +182,17 @@ function showSendAffordance() {
     if (transferShown) return;
     
     transferShown = true;
+    sendAffordance.classList.remove('hidden');
     sendAffordance.classList.add('visible');
-    trackTransferShown();
+    onNightTransferShown();
 }
 
 function handleSend(e) {
     if (e) {
         e.stopPropagation();
     }
-    trackTransferClicked();
+    
+    onNightTransferred();
     
     const shareText = "I'm sending you Nindra Nandan for tonight.\nYou don't have to reply.\nJust listen if you're awake.";
     
@@ -238,7 +234,6 @@ function handleAudioEnd() {
     
     audioEnded = true;
     sendAffordance.classList.remove('visible');
-    trackAudioCompleted();
     
     document.body.style.backgroundColor = '#030303';
     
@@ -265,9 +260,24 @@ function ensureVisualsHidden() {
     characterVideo.classList.add('hidden');
 }
 
+function onNightArrived() {
+}
+
+function onNightStarted() {
+}
+
+function onNightTransferShown() {
+}
+
+function onNightTransferred() {
+}
+
 receiveBtn.addEventListener('click', handleReceive);
-sendBtn.addEventListener('click', handleSend);
 sendAffordanceBtn.addEventListener('click', handleSend);
+
+document.addEventListener('DOMContentLoaded', () => {
+    onNightArrived();
+});
 
 handleArrival();
 
