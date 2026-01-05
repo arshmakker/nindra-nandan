@@ -24,6 +24,8 @@ const receiveBtn = document.getElementById('receive-btn');
 const transitionText = document.getElementById('transition-text');
 const nightAudio = document.getElementById('night-audio');
 const sendBtn = document.getElementById('send-btn');
+const sendAffordance = document.getElementById('send-affordance');
+const sendAffordanceBtn = document.getElementById('send-affordance-btn');
 const exitCharacterContainer = document.getElementById('exit-character-container');
 const exitText = document.getElementById('exit-text');
 
@@ -163,15 +165,11 @@ function startAudio() {
 function setupAudioListeners() {
     ensureVisualsHidden();
     
-    nightAudio.addEventListener('timeupdate', () => {
-        const currentTime = nightAudio.currentTime;
-        
-        if (!transferShown && currentTime >= 20 && currentTime <= 25) {
-            showTransfer();
+    setTimeout(() => {
+        if (!transferShown && !audioEnded) {
+            showSendAffordance();
         }
-        
-        ensureVisualsHidden();
-    });
+    }, 22000);
     
     nightAudio.addEventListener('ended', () => {
         handleAudioEnd();
@@ -186,17 +184,18 @@ function setupAudioListeners() {
     });
 }
 
-function showTransfer() {
+function showSendAffordance() {
     if (transferShown) return;
     
     transferShown = true;
-    transferEl.classList.remove('hidden');
-    transferEl.classList.add('visible');
+    sendAffordance.classList.add('visible');
     trackTransferShown();
 }
 
 function handleSend(e) {
-    e.stopPropagation();
+    if (e) {
+        e.stopPropagation();
+    }
     trackTransferClicked();
     
     const shareText = "I'm sending you Nindra Nandan for tonight.\nYou don't have to reply.\nJust listen if you're awake.";
@@ -238,6 +237,7 @@ function handleAudioEnd() {
     if (audioEnded) return;
     
     audioEnded = true;
+    sendAffordance.classList.remove('visible');
     trackAudioCompleted();
     
     document.body.style.backgroundColor = '#030303';
@@ -267,6 +267,7 @@ function ensureVisualsHidden() {
 
 receiveBtn.addEventListener('click', handleReceive);
 sendBtn.addEventListener('click', handleSend);
+sendAffordanceBtn.addEventListener('click', handleSend);
 
 handleArrival();
 

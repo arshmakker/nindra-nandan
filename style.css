@@ -175,6 +175,34 @@ body {
     display: none;
 }
 
+.send-affordance {
+    position: absolute;
+    bottom: 4rem;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    padding: 0 2rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 900ms ease-in-out, visibility 900ms ease-in-out;
+    max-width: 90%;
+    pointer-events: none;
+}
+
+.send-affordance.visible {
+    opacity: 0.65;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.send-text {
+    font-size: 1.2rem;
+    font-weight: 300;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    color: #e8e8e8;
+}
+
 /* STATE 3: TRANSFER */
 #transfer {
     background-color: transparent;
