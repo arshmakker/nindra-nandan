@@ -8,6 +8,10 @@ const STATE = {
 let transferShown = false;
 let audioEnded = false;
 let videoHasPlayed = false;
+let nightArrivedTracked = false;
+let nightStartedTracked = false;
+let nightTransferShownTracked = false;
+let nightTransferredTracked = false;
 
 const arrivalEl = document.getElementById('arrival');
 const transitionEl = document.getElementById('transition');
@@ -261,15 +265,27 @@ function ensureVisualsHidden() {
 }
 
 function onNightArrived() {
+    if (nightArrivedTracked) return;
+    nightArrivedTracked = true;
+    if (window.plausible) plausible('NightArrived');
 }
 
 function onNightStarted() {
+    if (nightStartedTracked) return;
+    nightStartedTracked = true;
+    if (window.plausible) plausible('NightStarted');
 }
 
 function onNightTransferShown() {
+    if (nightTransferShownTracked) return;
+    nightTransferShownTracked = true;
+    if (window.plausible) plausible('NightTransferShown');
 }
 
 function onNightTransferred() {
+    if (nightTransferredTracked) return;
+    nightTransferredTracked = true;
+    if (window.plausible) plausible('NightTransferred');
 }
 
 receiveBtn.addEventListener('click', handleReceive);
